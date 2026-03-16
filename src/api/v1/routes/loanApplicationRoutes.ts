@@ -10,31 +10,32 @@ import authenticate from "../middleware/authenticate";
 import authorize from "../middleware/authorize";
 
 export const loanApplicationRoutes: Router = Router();
+
 loanApplicationRoutes.get(
   "/loans",
   authenticate,
-  authorize({ hasRole: ["admin", "manager", "user"] }),
+  authorize({ hasRole: ["user", "manager", "admin"] }),
   getAllLoanApplicationsController
 );
 
 loanApplicationRoutes.get(
   "/loans/:id",
   authenticate,
-  authorize({ hasRole: ["admin", "manager", "user"] }),
+  authorize({ hasRole: ["user", "manager", "admin"] }),
   getLoanApplicationByIdController
 );
 
 loanApplicationRoutes.post(
   "/loans",
   authenticate,
-  authorize({ hasRole: ["admin", "manager"] }),
+  authorize({ hasRole: ["manager", "admin"] }),
   createLoanApplicationController
 );
 
 loanApplicationRoutes.put(
   "/loans/:id",
   authenticate,
-  authorize({ hasRole: ["admin", "manager"] }),
+  authorize({ hasRole: ["manager", "admin"] }),
   updateLoanApplicationController
 );
 
