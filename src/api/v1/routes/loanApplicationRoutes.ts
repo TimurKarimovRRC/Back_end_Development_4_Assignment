@@ -42,6 +42,6 @@ loanApplicationRoutes.put(
 loanApplicationRoutes.delete(
   "/loans/:id",
   authenticate,
-  authorize({ hasRole: ["admin"] }),
+  authorize({ hasRole: ["manager","admin"] }),
   deleteLoanApplicationController
 );

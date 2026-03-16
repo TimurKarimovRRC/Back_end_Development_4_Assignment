@@ -9,7 +9,10 @@ export async function getUserDetailsController(
   next: NextFunction
 ): Promise<void> {
   try {
-    const userId: string | undefined = request.params.uid;
+    const userIdParam: string | string[] | undefined = request.params.uid;
+    const userId: string | undefined = Array.isArray(userIdParam)
+      ? userIdParam[0]
+      : userIdParam;
 
     if (!userId) {
       throw new BadRequestError("User id is required", "USER_ID_REQUIRED");
@@ -23,8 +26,8 @@ export async function getUserDetailsController(
         uid: userRecord.uid,
         email: userRecord.email,
         disabled: userRecord.disabled,
-        customClaims: userRecord.customClaims ?? {}
-      }
+        customClaims: userRecord.customClaims ?? {},
+      },
     });
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("There is no user")) {
