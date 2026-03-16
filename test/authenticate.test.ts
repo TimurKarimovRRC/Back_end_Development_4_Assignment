@@ -1,12 +1,10 @@
 import authenticate from "../src/api/v1/middleware/authenticate";
 
 jest.mock("../src/config/firebaseConfig", () => ({
-  auth: {
-    verifyIdToken: jest.fn()
-  }
+  auth: { verifyIdToken: jest.fn() },
 }));
 
-import { auth } from "./src/config/firebaseConfig";
+import { auth } from "../src/config/firebaseConfig";
 
 function createMockResponse() {
   const response: any = {};
@@ -17,11 +15,8 @@ function createMockResponse() {
 }
 
 describe("authenticate middleware", () => {
-  it("it should return TOKEN_NOT_FOUND when no token is provided", async () => {
-    const request: any = {
-      headers: {}
-    };
-
+  it("should return TOKEN_NOT_FOUND when no token is provided", async () => {
+    const request: any = { headers: {} };
     const response = createMockResponse();
     const next = jest.fn();
 
@@ -32,15 +27,14 @@ describe("authenticate middleware", () => {
     expect(firstCallArgument.code).toBe("TOKEN_NOT_FOUND");
   });
 
-  it("it should return TOKEN_INVALID when token verification fails", async () => {
-    (auth.verifyIdToken as jest.Mock).mockRejectedValue(new Error("bad token"));
+  it("should return TOKEN_INVALID when token verification fails", async () => {
+    (auth.verifyIdToken as jest.Mock).mockRejectedValue(
+      new Error("bad token")
+    );
 
     const request: any = {
-      headers: {
-        authorization: "Bearer invalid-token"
-      }
+      headers: { authorization: "Bearer invalid-token" },
     };
-
     const response = createMockResponse();
     const next = jest.fn();
 
@@ -51,19 +45,16 @@ describe("authenticate middleware", () => {
     expect(firstCallArgument.code).toBe("TOKEN_INVALID");
   });
 
-  it("it should store uid in res.locals when token is valid", async () => {
+  it("should store uid in res.locals when token is valid", async () => {
     (auth.verifyIdToken as jest.Mock).mockResolvedValue({
       uid: "uid-123",
       email: "user@example.com",
-      role: "user"
+      role: "user",
     });
 
     const request: any = {
-      headers: {
-        authorization: "Bearer valid-token"
-      }
+      headers: { authorization: "Bearer valid-token" },
     };
-
     const response = createMockResponse();
     const next = jest.fn();
 
@@ -73,19 +64,16 @@ describe("authenticate middleware", () => {
     expect(next).toHaveBeenCalledWith();
   });
 
-  it("it should store role in res.locals when token is valid", async () => {
+  it("should store role in res.locals when token is valid", async () => {
     (auth.verifyIdToken as jest.Mock).mockResolvedValue({
       uid: "uid-123",
       email: "manager@pixell-river.com",
-      role: "manager"
+      role: "manager",
     });
 
     const request: any = {
-      headers: {
-        authorization: "Bearer valid-token"
-      }
+      headers: { authorization: "Bearer valid-token" },
     };
-
     const response = createMockResponse();
     const next = jest.fn();
 

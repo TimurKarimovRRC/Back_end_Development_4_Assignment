@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { AuthenticationError } from "../errors/errors";
-import { getErrorMessage, getErrorCode } from "../utils/errorUtils";
 import { auth } from "../../../config/firebaseConfig";
 
 const authenticate = async (
@@ -10,7 +9,7 @@ const authenticate = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader: string | undefined = req.headers.authorization;
 
     const token: string | undefined = authHeader?.startsWith("Bearer ")
       ? authHeader.split(" ")[1]
@@ -27,26 +26,21 @@ const authenticate = async (
 
     res.locals.uid = decodedToken.uid;
     res.locals.role = decodedToken.role;
+    res.locals.email = decodedToken.email;
 
     next();
   } catch (error: unknown) {
     if (error instanceof AuthenticationError) {
       next(error);
-    } else if (error instanceof Error) {
-      next(
-        new AuthenticationError(
-          `Unauthorized: ${getErrorMessage(error)}`,
-          getErrorCode(error)
-        )
-      );
-    } else {
-      next(
-        new AuthenticationError(
-          "Unauthorized: Invalid token",
-          "TOKEN_INVALID"
-        )
-      );
+      return;
     }
+
+    next(
+      new AuthenticationError(
+        "Unauthorized: Invalid token",
+        "TOKEN_INVALID"
+      )
+    );
   }
 };
 
