@@ -6,7 +6,7 @@ import { loanApplicationRoutes } from "./api/v1/routes/loanApplicationRoutes";
 import { userRoutes } from "./api/v1/routes/userRoutes";
 import { adminRoutes } from "./api/v1/routes/adminRoutes";
 import errorHandler from "./api/v1/middleware/errorHandler";
-import { getAccessLogFilePath } from "./api/v1/utils/loggingUtils";
+import { getAccessLogFilePath } from "./logs/loggingUtils";
 
 export const app = express();
 
