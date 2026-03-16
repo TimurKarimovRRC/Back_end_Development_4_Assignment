@@ -1,2 +1,5 @@
 node_modules/
 dist/
+assignment-cca09-firebase-adminsdk-fbsvc-75ce29446a.json
+serviceAccountKey.json
+src/logs
