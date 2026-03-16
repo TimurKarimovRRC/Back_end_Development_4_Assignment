@@ -1,8 +1,8 @@
 import { auth } from "../src/config/firebaseConfig";
 
 async function main(): Promise<void> {
-  const officerUser = await auth.getUserByEmail("officer@pixell-river.com");
-  await auth.setCustomUserClaims(officerUser.uid, { role: "officer" });
+  const officerUser = await auth.getUserByEmail("user@pixell-river.com");
+  await auth.setCustomUserClaims(officerUser.uid, { role: "user" });
 
   const managerUser = await auth.getUserByEmail("manager@pixell-river.com");
   await auth.setCustomUserClaims(managerUser.uid, { role: "manager" });

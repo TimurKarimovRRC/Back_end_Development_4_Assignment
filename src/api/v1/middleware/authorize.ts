@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AuthorizationOptions } from "../models/authorizationOptions";
 import { AuthorizationError } from "../errors/errors";
 
-const authorize = (opts: AuthorizationOptions) => {
+const authorize = (options: AuthorizationOptions) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const userRole: string | undefined = res.locals.role as string | undefined;
     const userUid: string | undefined = res.locals.uid as string | undefined;
@@ -18,12 +18,16 @@ const authorize = (opts: AuthorizationOptions) => {
       return;
     }
 
-    if (opts.hasRole.includes(userRole as "admin" | "manager" | "user")) {
+    if (
+      options.hasRole.includes(
+        userRole as "user" | "manager" | "admin"
+      )
+    ) {
       next();
       return;
     }
 
-    if (opts.allowSameUser && userUid && requestUid && userUid === requestUid) {
+    if (options.allowSameUser && userUid && requestUid && userUid === requestUid) {
       next();
       return;
     }
