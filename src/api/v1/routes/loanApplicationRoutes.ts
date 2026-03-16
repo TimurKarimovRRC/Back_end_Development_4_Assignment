@@ -10,7 +10,7 @@ import authenticate from "../middleware/authenticate";
 import authorize from "../middleware/authorize";
 
 export const loanApplicationRoutes: Router = Router();
-oanApplicationRoutes.get(
+loanApplicationRoutes.get(
   "/loans",
   authenticate,
   authorize({ hasRole: ["admin", "manager", "user"] }),
